@@ -2,9 +2,15 @@ package com.sentosh1ne.linkedinapihelperv2.utils
 
 import java.util.*
 
+/**
+ * Represents the types of data for which access is being requested.
+ */
 class PermissionsScope(vararg permissions: String) {
 
     private val permissions = HashSet<String>()
+
+    val scopeValue: String
+        get() = toString()
 
     init {
         this.permissions.addAll(permissions)
