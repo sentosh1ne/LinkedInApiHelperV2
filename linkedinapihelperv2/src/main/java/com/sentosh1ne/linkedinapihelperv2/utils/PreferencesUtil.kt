@@ -20,7 +20,7 @@ internal class PreferencesUtil private constructor(context: Context) {
             return preference
         }
 
-        val ACCESS_TOKEN = "access_token"
+        const val ACCESS_TOKEN = "access_token"
         val AUTH_CODE = "auth_code"
 
     }
@@ -34,7 +34,7 @@ internal class PreferencesUtil private constructor(context: Context) {
         sharedPreferences.edit().putString(ACCESS_TOKEN, token).apply()
     }
 
-    fun getToken(): String {
+    fun getToken(): String? {
         return sharedPreferences.getString(ACCESS_TOKEN, null)
     }
 

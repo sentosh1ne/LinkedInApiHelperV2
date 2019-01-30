@@ -1,4 +1,4 @@
-package com.sentosh1ne.linkedinapihelperv2.utils
+package com.sentosh1ne.linkedinapihelperv2.entities
 
 import java.util.*
 

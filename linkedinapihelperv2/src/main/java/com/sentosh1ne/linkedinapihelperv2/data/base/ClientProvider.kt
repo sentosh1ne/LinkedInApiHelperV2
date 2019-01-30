@@ -8,7 +8,7 @@ internal object ClientProvider {
     fun getClient(): OkHttpClient {
         return OkHttpClient().newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(HttpLoggingInterceptor()
                         .setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build()

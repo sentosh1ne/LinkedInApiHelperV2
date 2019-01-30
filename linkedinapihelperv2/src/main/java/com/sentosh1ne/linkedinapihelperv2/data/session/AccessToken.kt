@@ -21,7 +21,7 @@ internal class AccessToken(var accessTokenValue: String, var expiresIn: Long) : 
 
     companion object {
         @Throws(JSONException::class)
-        fun fromJson(json: String): AccessToken {
+        fun fromJson(json: String?): AccessToken {
             val jsonObject = JSONObject(json)
             val accessToken = AccessToken(
                     jsonObject.getString("access_token"),

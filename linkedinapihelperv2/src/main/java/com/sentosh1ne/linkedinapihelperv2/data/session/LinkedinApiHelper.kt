@@ -1,24 +1,37 @@
 package com.sentosh1ne.linkedinapihelperv2.data.session
 
-import android.app.Activity
-import android.content.Intent
-import com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
+import android.content.Context
+import org.json.JSONObject
 
-object LinkedinApiHelper {
-    private const val REQUEST_CODE = 444555
+class LinkedinApiHelper(context: Context) {
 
-    fun init() {
+    private var accessToken: AccessToken? = null
 
+    private var sessionManager: SessionManager = SessionManager(context)
+
+    init {
+        accessToken = sessionManager.getToken()
     }
 
-    fun login(activity: Activity, scope: String, appConfig: AppConfig) {
-        val intent = Intent(activity, LinkedInAuthActivity::class.java)
-        intent.putExtra("scope", scope)
-        intent.putExtra("appConfig", appConfig)
-        activity.startActivityForResult(intent, REQUEST_CODE)
+    fun getUserProfileRaw(vararg fields: String): JSONObject {
+        if (accessToken != null && sessionManager.isSessionValid()) {
+            //todo make request
+        }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    fun getUserProfileRaw(): JSONObject {
+        if (accessToken != null && sessionManager.isSessionValid()) {
+            //todo make request
+        }
+    }
+
+
+    fun getUserProfilePretty(vararg fields: String): JSONObject {
+        return JSONObject()
+    }
+
+    fun getUserEmail(): JSONObject {
+
     }
 }
 

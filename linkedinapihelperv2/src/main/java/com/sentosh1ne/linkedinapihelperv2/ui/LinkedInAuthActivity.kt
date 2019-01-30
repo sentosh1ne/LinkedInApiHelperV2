@@ -1,6 +1,7 @@
 package com.sentosh1ne.linkedinapihelperv2.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,14 +15,20 @@ import android.webkit.WebViewClient
 import com.sentosh1ne.linkedinapihelperv2.R
 import com.sentosh1ne.linkedinapihelperv2.data.api.AuthApi
 import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
+import com.sentosh1ne.linkedinapihelperv2.data.session.SessionManager
 import kotlinx.android.synthetic.main.auth_activity.*
+import org.json.JSONException
 
 internal class LinkedInAuthActivity : AppCompatActivity() {
     private var scope: String? = null
 
+    private var state: String? = null
+
     private var appConfig: AppConfig? = null
 
     private lateinit var authApi: AuthApi
+
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +43,7 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
         }
 
         authApi = AuthApi()
+        sessionManager = SessionManager(this)
         initWebClient()
 
         if (appConfig == null || scope == null) {
@@ -47,20 +55,19 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initWebClient() {
         authWebView.webViewClient = object : WebViewClient() {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                //todo get token and finish with activity result
                 val code = request?.url?.getQueryParameter("code")
-                var state = request?.url?.getQueryParameter("state")
+                state = request?.url?.getQueryParameter("state")
 
 
                 code?.let {
-                    authApi.getToken(appConfig!!, code, state)
+                    requestToken(code)
                 }
 
-                //todo save session
                 return false
             }
 
@@ -68,16 +75,34 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 val parsedUri = Uri.parse(url)
                 val code = parsedUri.getQueryParameter("code")
-                var state = parsedUri.getQueryParameter("state")
+                state = parsedUri.getQueryParameter("state")
 
-                if (state == null) {
-                    state = ""
+                code?.let {
+                    requestToken(code)
                 }
-
-                authApi.getToken(appConfig!!, state)
 
                 return false
             }
+        }
+    }
+
+    private fun requestToken(code: String) {
+        if (state == null) {
+            state = ""
+        }
+
+        try {
+            val accessToken = authApi.getToken(appConfig!!, code, state!!)
+            sessionManager.saveToken(accessToken)
+            val resultIntent = Intent()
+            resultIntent.putExtra("access_token", accessToken.accessTokenValue)
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+            Log.e(LinkedInAuthActivity::class.java.simpleName, "Error parsing token")
         }
     }
 
