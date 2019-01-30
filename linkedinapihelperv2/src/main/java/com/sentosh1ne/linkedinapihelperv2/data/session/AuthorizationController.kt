@@ -1,3 +1,0 @@
-package com.sentosh1ne.linkedinapihelperv2.data.session
-
-class AuthorizationController

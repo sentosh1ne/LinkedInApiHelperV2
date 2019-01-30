@@ -3,7 +3,7 @@ package com.sentosh1ne.linkedinapihelperv2.utils
 import android.content.Context
 import android.content.SharedPreferences
 
-class PreferencesUtil private constructor(context: Context) {
+internal class PreferencesUtil private constructor(context: Context) {
     private var sharedPreferences: SharedPreferences
 
     companion object {
@@ -28,6 +28,14 @@ class PreferencesUtil private constructor(context: Context) {
     init {
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME,
                 Context.MODE_PRIVATE)
+    }
+
+    fun saveToken(token: String) {
+        sharedPreferences.edit().putString(ACCESS_TOKEN, token).apply()
+    }
+
+    fun getToken(): String {
+        return sharedPreferences.getString(ACCESS_TOKEN, null)
     }
 
     fun clearPrefernces() {
