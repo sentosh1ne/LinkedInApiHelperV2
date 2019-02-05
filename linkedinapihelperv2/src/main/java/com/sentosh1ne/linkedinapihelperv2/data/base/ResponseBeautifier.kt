@@ -1,3 +1,3 @@
 package com.sentosh1ne.linkedinapihelperv2.data.base
 
-class ResponseBeautifier
+internal class ResponseBeautifier

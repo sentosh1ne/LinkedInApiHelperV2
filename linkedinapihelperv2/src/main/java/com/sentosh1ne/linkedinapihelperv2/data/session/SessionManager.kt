@@ -10,7 +10,7 @@ import com.sentosh1ne.linkedinapihelperv2.utils.PreferencesUtil
 
 internal class SessionManager(context: Context) {
 
-    val preferences = PreferencesUtil.getInstance(context)
+    private val preferences = PreferencesUtil.getInstance(context)
 
     fun getToken(): AccessToken? {
         val tokenString = preferences.getToken()
@@ -34,7 +34,7 @@ internal class SessionManager(context: Context) {
         val intent = Intent(activity, LinkedInAuthActivity::class.java)
         intent.putExtra("scope", scope.scopeValue)
         intent.putExtra("appConfig", appConfig)
-        activity.startActivityForResult(intent, Companion.REQUEST_CODE)
+        activity.startActivityForResult(intent, REQUEST_CODE)
     }
 
     companion object {

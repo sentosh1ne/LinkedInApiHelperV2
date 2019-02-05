@@ -4,8 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.Serializable
 
-internal class AccessToken(var accessTokenValue: String, var expiresIn: Long) : Serializable {
-    var expiresOn = System.currentTimeMillis() + expiresIn
+internal class AccessToken(var accessTokenValue: String, var expiresOn: Long) : Serializable {
     //todo
     fun isExpired(): Boolean {
         return System.currentTimeMillis() > expiresOn
@@ -14,7 +13,6 @@ internal class AccessToken(var accessTokenValue: String, var expiresIn: Long) : 
     fun toJson(): String {
         val jsonObject = JSONObject()
         jsonObject.put("access_token", accessTokenValue)
-        jsonObject.put("expires_in", expiresIn)
         jsonObject.put("expires_on", expiresOn)
         return jsonObject.toString()
     }
@@ -23,13 +21,10 @@ internal class AccessToken(var accessTokenValue: String, var expiresIn: Long) : 
         @Throws(JSONException::class)
         fun fromJson(json: String?): AccessToken {
             val jsonObject = JSONObject(json)
-            val accessToken = AccessToken(
+            return AccessToken(
                     jsonObject.getString("access_token"),
-                    jsonObject.getLong("expires_in")
+                    jsonObject.getLong("expires_on")
             )
-
-            accessToken.expiresOn = jsonObject.getLong("expires_on")
-            return accessToken
         }
     }
 }

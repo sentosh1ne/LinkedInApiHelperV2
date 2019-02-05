@@ -9,7 +9,7 @@ import org.json.JSONObject
 
 internal class AuthApi {
     private val baseUrl = "https://www.linkedin.com/oauth/v2/"
-    private val requestController = RequestCreator()
+    private val requestCreator = RequestCreator()
 
     /**
      * Creates url used in webview to acquire code used for authorization
@@ -49,14 +49,14 @@ internal class AuthApi {
             query["state"] = state
         }
 
-        val request = requestController.buildPostRequest(url, query)
+        val request = requestCreator.buildPostRequest(url, query)
 
         val response = ClientProvider.getClient().newCall(request).execute()
         val responseJson = JSONObject(response.body()?.string())
 
         return AccessToken(
                 responseJson.getString("access_token"),
-                responseJson.getLong("expires_in")
+                System.currentTimeMillis() + responseJson.getLong("expires_in")
         )
     }
 }
