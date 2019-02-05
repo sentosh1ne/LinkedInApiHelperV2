@@ -3,8 +3,11 @@ package com.sentosh1ne.linkedinapihelperv2.data.session
 import android.os.Parcel
 import android.os.Parcelable
 
+/**
+ *
+ */
 class AppConfig(val clientId: String, val clientSecret: String, val redirectUrl: String) : Parcelable {
-    constructor(source: Parcel) : this(
+    internal constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),
             source.readString()

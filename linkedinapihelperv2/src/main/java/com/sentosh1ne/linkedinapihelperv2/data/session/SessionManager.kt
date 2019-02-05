@@ -1,25 +1,24 @@
 package com.sentosh1ne.linkedinapihelperv2.data.session
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
 import com.sentosh1ne.linkedinapihelperv2.utils.PreferencesUtil
 
-internal class SessionManager(context: Context) {
+internal class SessionManager(private val activity: Activity) {
 
-    private val preferences = PreferencesUtil.getInstance(context)
+    private val preferences = PreferencesUtil.getInstance(activity)
 
     fun getToken(): AccessToken? {
-        val tokenString = preferences.getToken()
+        val tokenString = preferences?.getToken()
         return AccessToken.fromJson(tokenString)
     }
 
     fun saveToken(token: AccessToken) {
         if (!token.isExpired()) {
-            preferences.saveToken(token.toJson())
+            preferences?.saveToken(token.toJson())
         } else {
             Log.e(SessionManager::class.simpleName, "Error saving expired token")
         }
@@ -30,7 +29,7 @@ internal class SessionManager(context: Context) {
         return token != null && token.isExpired()
     }
 
-    fun login(activity: Activity, scope: PermissionsScope, appConfig: AppConfig) {
+    fun login(scope: PermissionsScope, appConfig: AppConfig) {
         val intent = Intent(activity, LinkedInAuthActivity::class.java)
         intent.putExtra("scope", scope.scopeValue)
         intent.putExtra("appConfig", appConfig)
@@ -38,6 +37,6 @@ internal class SessionManager(context: Context) {
     }
 
     companion object {
-        private const val REQUEST_CODE = 444555
+        private const val REQUEST_CODE: Int = 532
     }
 }

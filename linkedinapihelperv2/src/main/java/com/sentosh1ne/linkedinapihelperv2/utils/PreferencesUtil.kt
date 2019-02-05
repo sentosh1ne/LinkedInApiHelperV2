@@ -9,11 +9,11 @@ internal class PreferencesUtil private constructor(context: Context) {
     companion object {
         private const val SHARED_PREFERENCES_NAME = "linkedinapihelper_preferences"
 
-        private lateinit var preference: PreferencesUtil
+        private var preference: PreferencesUtil? = null
 
-        fun getInstance(context: Context): PreferencesUtil {
+        fun getInstance(context: Context): PreferencesUtil? {
 
-            if (!::preference.isInitialized) {
+            if (preference == null) {
                 preference = PreferencesUtil(context)
             }
 

@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/linkedinapihelperv2" />
+            <option value="$PROJECT_DIR$/linkedinhelperdemo" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

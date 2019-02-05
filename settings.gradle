@@ -1,1 +1,1 @@
-include ':linkedinapihelperv2'
+include ':linkedinapihelperv2', ':linkedinhelperdemo'
