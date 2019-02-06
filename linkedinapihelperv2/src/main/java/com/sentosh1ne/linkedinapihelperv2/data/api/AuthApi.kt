@@ -28,8 +28,6 @@ internal class AuthApi {
             if (state != null && !state.isEmpty()) {
                 url.addQueryParameter("state", state)
             }
-
-            url.addQueryParameter("redirect_uri", appConfig.redirectUrl)
         }
 
         return url?.build().toString()
@@ -44,6 +42,7 @@ internal class AuthApi {
         query["code"] = code
         query["redirect_uri"] = appConfig.redirectUrl
         query["client_id"] = appConfig.clientId
+        query["client_secret"] = appConfig.clientSecret
 
         if (state != null && !state.isEmpty()) {
             query["state"] = state

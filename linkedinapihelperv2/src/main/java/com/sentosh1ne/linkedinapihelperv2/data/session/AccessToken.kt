@@ -26,7 +26,10 @@ internal class AccessToken(var accessTokenValue: String, var expiresOn: Long) : 
                         jsonObject.getString("access_token"),
                         jsonObject.getLong("expires_on")
                 )
-            } catch (e: Exception) {
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                null
+            } catch (e: NullPointerException){
                 e.printStackTrace()
                 null
             }

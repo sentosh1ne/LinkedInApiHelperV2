@@ -20,7 +20,7 @@ internal class RequestCreator {
                          headers: Map<String, String> = HashMap()): Request {
 
         val request = buildRequest(url, query, headers)
-        val requestBody = RequestBody.create(MediaType.get("application/json; charset=utf-8"), body)
+        val requestBody = RequestBody.create(MediaType.get("application/x-www-form-urlencoded"), body)
         request.post(requestBody)
         return request.build()
     }

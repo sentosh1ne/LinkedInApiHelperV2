@@ -17,6 +17,9 @@ import com.sentosh1ne.linkedinapihelperv2.data.api.AuthApi
 import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.data.session.SessionManager
 import kotlinx.android.synthetic.main.auth_activity.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 
 internal class LinkedInAuthActivity : AppCompatActivity() {
@@ -24,7 +27,7 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
 
     private var state: String? = null
 
-    private var appConfig: AppConfig? = null
+    private lateinit var appConfig: AppConfig
 
     private lateinit var authApi: AuthApi
 
@@ -46,39 +49,65 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
         initWebClient()
 
-        if (appConfig == null || scope == null) {
-            Log.i(LinkedInAuthActivity::class.simpleName, "Scope or AppConfig was not provided")
+        if (!::appConfig.isInitialized || scope == null) {
+            Log.i(LinkedInAuthActivity::class.java.simpleName, "Scope or AppConfig was not provided")
             setResult(Activity.RESULT_CANCELED)
             finish()
         } else {
-            authWebView.loadUrl(authApi.buildCodeRequestUrl(scope!!, appConfig!!))
+            authWebView.loadUrl(authApi.buildCodeRequestUrl(scope!!, appConfig))
+        }
+    }
+
+    private fun initWebClient() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            authWebView.webViewClient = getLolipopWebViewClient()
+        } else {
+            authWebView.webViewClient = getPrelolipopWebViewClient()
         }
     }
 
 
-    private fun initWebClient() {
-        authWebView.webViewClient = object : WebViewClient() {
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                val code = request?.url?.getQueryParameter("code")
-                state = request?.url?.getQueryParameter("state")
-
-
-                code?.let {
-                    requestToken(code)
+    private fun getPrelolipopWebViewClient(): WebViewClient {
+        return object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
+                if (!url.contains(appConfig.redirectUrl)){
+                    return true
                 }
 
-                return false
-            }
-
-
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 val parsedUri = Uri.parse(url)
                 val code = parsedUri.getQueryParameter("code")
                 state = parsedUri.getQueryParameter("state")
 
                 code?.let {
-                    requestToken(code)
+                    runBlocking {
+                        withContext(Dispatchers.Default) {
+                            requestToken(code)
+                        }
+                    }
+                }
+                return false
+            }
+        }
+    }
+
+    private fun getLolipopWebViewClient(): WebViewClient {
+        return object : WebViewClient() {
+
+            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
+                if (!request.url.toString().contains(appConfig.redirectUrl)){
+                    return true
+                }
+
+                val code = request.url?.getQueryParameter("code")
+                state = request.url?.getQueryParameter("state")
+
+                code?.let {
+                    runBlocking {
+                        withContext(Dispatchers.Default) {
+                            requestToken(code)
+                        }
+                    }
                 }
 
                 return false
@@ -92,9 +121,10 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
         }
 
         try {
-            val accessToken = authApi.getToken(appConfig!!, code, state!!)
+            val accessToken = authApi.getToken(appConfig, code, state!!)
             sessionManager.saveToken(accessToken)
             val resultIntent = Intent()
+            Log.d(LinkedInAuthActivity::class.java.simpleName, "Token value = ${accessToken.accessTokenValue}")
             resultIntent.putExtra("access_token", accessToken.accessTokenValue)
             setResult(RESULT_OK, resultIntent)
             finish()
