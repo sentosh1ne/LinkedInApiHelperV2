@@ -26,17 +26,14 @@ internal class SessionManager(private val activity: Activity) {
 
     fun isSessionValid(): Boolean {
         val token = getToken()
-        return token != null && token.isExpired()
+        return token != null && !token.isExpired()
     }
 
     fun login(scope: PermissionsScope, appConfig: AppConfig) {
         val intent = Intent(activity, LinkedInAuthActivity::class.java)
         intent.putExtra("scope", scope.scopeValue)
         intent.putExtra("appConfig", appConfig)
-        activity.startActivityForResult(intent, REQUEST_CODE)
+        activity.startActivityForResult(intent, LinkedinApiHelper.ACTIVITY_REQUEST_CODE)
     }
 
-    companion object {
-        private const val REQUEST_CODE: Int = 532
-    }
 }

@@ -71,7 +71,7 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
         return object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
                 if (!url.contains(appConfig.redirectUrl)){
-                    return true
+                    return super.shouldOverrideUrlLoading(view, url)
                 }
 
                 val parsedUri = Uri.parse(url)
@@ -96,7 +96,7 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
                 if (!request.url.toString().contains(appConfig.redirectUrl)){
-                    return true
+                    return super.shouldOverrideUrlLoading(view, request)
                 }
 
                 val code = request.url?.getQueryParameter("code")

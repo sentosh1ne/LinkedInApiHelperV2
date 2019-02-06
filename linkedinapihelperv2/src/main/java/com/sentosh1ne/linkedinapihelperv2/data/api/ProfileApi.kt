@@ -22,7 +22,7 @@ internal class MyProfileApi {
         val headers = HashMap<String, String>()
         headers["Authorization"] = "Bearer $token"
 
-        val request = requestCreator.buildPostRequest(url = url,
+        val request = requestCreator.buildGetRequest(url = url,
                 headers = headers
         )
 

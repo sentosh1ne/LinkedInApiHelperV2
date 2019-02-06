@@ -13,6 +13,10 @@ class LinkedinApiHelper(activity: Activity) {
 
     private val myProfileApi: MyProfileApi = MyProfileApi()
 
+    companion object {
+        const val ACTIVITY_REQUEST_CODE: Int = 532
+    }
+
     init {
         accessToken = sessionManager.getToken()
     }
