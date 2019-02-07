@@ -13,7 +13,7 @@ interface Fields {
 
         val MAIDEN_NAME = "maidenName"
 
-        val PROFILE_PICTURE = "profilePicture"
+        val PROFILE_PICTURE = "profilePicture(displayImage~:playableStreams)"
     }
 
     object EmailAddress
@@ -46,7 +46,7 @@ interface Fields {
 
         val PICTURE_INFO = "pictureInfo"
 
-        val PROFILE_PICTURE = "profilePicture"
+        val PROFILE_PICTURE = "profilePicture(displayImage~:playableStreams)"
 
         val VANITY_NAME = "vanityName"
 

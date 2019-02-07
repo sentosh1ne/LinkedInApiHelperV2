@@ -17,9 +17,9 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
-    private val clientId = "777v6fv2ixsrmf"
-    private val clientSecret = "vBOzh84VWgThhIA0"
-    private val redirectUri = "https://google.com"
+    private val clientId = "86rmods9ln6yj5"
+    private val clientSecret = "VWUjjkx7yEQX2ceO"
+    private val redirectUri = "http://www.omivoyage.com"
 
     private lateinit var apiHelper: LinkedinApiHelper
 
@@ -46,12 +46,13 @@ class MainActivity : AppCompatActivity() {
     private fun getUserProfileRaw() {
         runBlocking {
             withContext(Dispatchers.Default) {
-                val result = apiHelper.getUserProfileRaw(
-                        Fields.BasicProfile.FIRST_NAME,
-                        Fields.BasicProfile.LAST_NAME
+                val result = apiHelper.getUserProfilePretty(
+                        Fields.LiteProfile.FIRST_NAME,
+                        Fields.LiteProfile.LAST_NAME,
+                        Fields.LiteProfile.PROFILE_PICTURE
                 )
 
-                Log.d(this::class.java.simpleName, "Profiile json = ${result.toString()}")
+                Log.d(this::class.java.simpleName, "Profile json = ${result.toString()}")
             }
 
         }

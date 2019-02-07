@@ -1,13 +1,13 @@
 package com.sentosh1ne.linkedinapihelperv2.data.base
 
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
 internal class ResponseBeautifier {
     fun mapLiteProfile(initial: JSONObject?): JSONObject? {
         initial?.let {
             val mapper = ProfileMapper(it)
-
             return mapper.mapFirstName()
                     .mapLastName()
                     .mapProfilePicture()
@@ -18,8 +18,8 @@ internal class ResponseBeautifier {
     }
 }
 
-internal class ProfileMapper(val input: JSONObject?) {
-    private var outputJson: JSONObject? = null
+internal class ProfileMapper(private val input: JSONObject?) {
+    private var outputJson: JSONObject? = JSONObject()
 
     fun mapFirstName(): ProfileMapper {
         return mapLocalizedString("firstName")
@@ -32,31 +32,41 @@ internal class ProfileMapper(val input: JSONObject?) {
     fun mapProfilePicture(): ProfileMapper {
         outputJson?.put("pictures", JSONArray())
 
-        val picturesArray = input?.getJSONObject("profilePicture")
-                ?.getJSONObject("displayImage~")
-                ?.getJSONArray("elements") ?: return this
+        try {
+            val picturesArray = input?.getJSONObject("profilePicture")
+                    ?.getJSONObject("displayImage~")
+                    ?.getJSONArray("elements") ?: return this
 
-        for (i in 0..(picturesArray.length() - 1)) {
-            val pictureJson = JSONObject()
-            val item = picturesArray.getJSONObject(0)
-            val width = item.getJSONObject("displaySize")
-                    .getInt("width")
-            val height = item.getJSONObject("displaySize")
-                    .getInt("height")
+            for (index in 0..(picturesArray.length() - 1)) {
+                val pictureJson = JSONObject()
 
-            pictureJson.put("width", width)
-            pictureJson.put("height", height)
+                val item = picturesArray.getJSONObject(index)
 
-            val identifiers = item.getJSONArray("identifiers")
+                val displaySize = item.getJSONObject("data")
+                        .getJSONObject("com.linkedin.digitalmedia.mediaartifact.StillImage")
+                        .getJSONObject("displaySize")
 
-            if (identifiers != null) {
-                val url = identifiers.getJSONObject(0)
-                pictureJson.put("url", url)
-            } else {
-                pictureJson.put("url", "")
+                val width = displaySize.getInt("width")
+
+                val height = displaySize.getInt("height")
+
+                pictureJson.put("width", width)
+                pictureJson.put("height", height)
+
+                val identifiers = item.getJSONArray("identifiers")
+
+                if (identifiers != null && identifiers.length() > 0) {
+                    val url = identifiers.getJSONObject(0).getString("file")
+                    pictureJson.put("url", url)
+                } else {
+                    pictureJson.put("url", "")
+                }
+
+                outputJson?.getJSONArray("pictures")?.put(pictureJson)
             }
-
-            outputJson?.getJSONArray("pictures")?.put(pictureJson)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            return this
         }
 
         return this
