@@ -1,5 +1,6 @@
 package com.sentosh1ne.linkedinapihelperv2.data.base
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 internal class ResponseBeautifier {
@@ -9,6 +10,7 @@ internal class ResponseBeautifier {
 
             return mapper.mapFirstName()
                     .mapLastName()
+                    .mapProfilePicture()
                     .get()
         }
 
@@ -25,6 +27,39 @@ internal class ProfileMapper(val input: JSONObject?) {
 
     fun mapLastName(): ProfileMapper {
         return mapLocalizedString("lastName")
+    }
+
+    fun mapProfilePicture(): ProfileMapper {
+        outputJson?.put("pictures", JSONArray())
+
+        val picturesArray = input?.getJSONObject("profilePicture")
+                ?.getJSONObject("displayImage~")
+                ?.getJSONArray("elements") ?: return this
+
+        for (i in 0..(picturesArray.length() - 1)) {
+            val pictureJson = JSONObject()
+            val item = picturesArray.getJSONObject(0)
+            val width = item.getJSONObject("displaySize")
+                    .getInt("width")
+            val height = item.getJSONObject("displaySize")
+                    .getInt("height")
+
+            pictureJson.put("width", width)
+            pictureJson.put("height", height)
+
+            val identifiers = item.getJSONArray("identifiers")
+
+            if (identifiers != null) {
+                val url = identifiers.getJSONObject(0)
+                pictureJson.put("url", url)
+            } else {
+                pictureJson.put("url", "")
+            }
+
+            outputJson?.getJSONArray("pictures")?.put(pictureJson)
+        }
+
+        return this
     }
 
     private fun mapLocalizedString(key: String): ProfileMapper {
