@@ -2,17 +2,16 @@ package com.sentosh1ne.linkedinapihelperv2.data.api
 
 import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
 import com.sentosh1ne.linkedinapihelperv2.entities.Fields
+import com.sentosh1ne.linkedinapihelperv2.utils.API_BASE_URL
 import org.json.JSONObject
 
 internal class MyProfileApi {
-    private val baseUrl = " https://api.linkedin.com/v2"
-
     private val requestCreator = RequestCreator()
 
     private val client = ClientProvider.getClient()
 
     fun getUserProfile(vararg fields: String, token: String): JSONObject {
-        var url = "$baseUrl/me?projection=("
+        var url = "$API_BASE_URL/me?projection=("
 
         fields.forEachIndexed { index, field ->
             if (index == fields.size - 1) {
@@ -37,7 +36,7 @@ internal class MyProfileApi {
     }
 
     fun getUserEmail(token: String): JSONObject {
-        var url = "$baseUrl/${Fields.EmailAddress.EMAIL}"
+        var url = "$API_BASE_URL/${Fields.EmailAddress.EMAIL}"
 
         val headers = HashMap<String, String>()
         headers["Authorization"] = "Bearer $token"

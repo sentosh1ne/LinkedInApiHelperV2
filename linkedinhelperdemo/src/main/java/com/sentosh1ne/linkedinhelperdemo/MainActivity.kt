@@ -62,9 +62,20 @@ class MainActivity : AppCompatActivity() {
     private fun getUserEmailRaw() {
         runBlocking {
             withContext(Dispatchers.Default) {
-                val result = apiHelper.getUserEmailPretty()
+                val result = apiHelper.getUserEmailRaw()
 
                 Log.d(this::class.java.simpleName, "Email json = ${result.toString()}")
+            }
+
+        }
+    }
+
+    private fun getUserEmailPretty() {
+        runBlocking {
+            withContext(Dispatchers.Default) {
+                val result = apiHelper.getUserEmailPretty()
+
+                Log.d(this::class.java.simpleName, "Email = ${result.toString()}")
             }
 
         }

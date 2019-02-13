@@ -4,12 +4,12 @@ import android.util.Log
 import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
 import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken
 import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
+import com.sentosh1ne.linkedinapihelperv2.utils.AUTH_BASE_URL
 import okhttp3.HttpUrl
 import org.json.JSONException
 import org.json.JSONObject
 
 internal class AuthApi {
-    private val baseUrl = "https://www.linkedin.com/oauth/v2/"
     private val requestCreator = RequestCreator()
 
     /**
@@ -17,7 +17,7 @@ internal class AuthApi {
      * @see com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
      */
     fun buildCodeRequestUrl(scope: String, appConfig: AppConfig, state: String? = ""): String {
-        val url = HttpUrl.parse(baseUrl + "authorization")?.newBuilder()
+        val url = HttpUrl.parse(AUTH_BASE_URL + "authorization")?.newBuilder()
 
         url?.let {
             url.addQueryParameter("response_type", "code")
@@ -35,9 +35,16 @@ internal class AuthApi {
         return url?.build().toString()
     }
 
+    /**
+     * Perform token aquiring request using code
+     * @param appConfig
+     * @param code
+     * @param state
+     * @see com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
+     */
     @Throws(JSONException::class)
     fun getToken(appConfig: AppConfig, code: String, state: String? = ""): AccessToken {
-        val url = baseUrl + "accessToken"
+        val url = AUTH_BASE_URL + "accessToken"
         val query = HashMap<String, String>()
 
         query["grant_type"] = "authorization_code"

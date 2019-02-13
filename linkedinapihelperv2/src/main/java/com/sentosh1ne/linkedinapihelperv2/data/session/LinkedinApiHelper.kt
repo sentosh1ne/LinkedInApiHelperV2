@@ -6,6 +6,11 @@ import com.sentosh1ne.linkedinapihelperv2.data.base.ResponseBeautifier
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import org.json.JSONObject
 
+/**
+ * Entry point to the LinkedIn Api and authentication
+ *
+ * @param activity
+ */
 class LinkedinApiHelper(activity: Activity) {
 
 
@@ -19,6 +24,10 @@ class LinkedinApiHelper(activity: Activity) {
         const val ACTIVITY_REQUEST_CODE: Int = 532
     }
 
+    /**
+     * Get lite profile info "as is"
+     * @param fields List of needed fields in response
+     */
     fun getUserProfileRaw(vararg fields: String): JSONObject? {
         val token = sessionManager.getToken()
         if (token != null && sessionManager.isSessionValid()) {
@@ -40,12 +49,18 @@ class LinkedinApiHelper(activity: Activity) {
         return JSONObject()
     }
 
-
+    /**
+     * Get lite profile info without redundant nested json fields
+     * @param fields List of needed fields in response
+     */
     fun getUserProfilePretty(vararg fields: String): JSONObject? {
-        return mapper.beautifyLiteProfile(getUserProfileRaw())
+        return mapper.beautifyLiteProfile(getUserProfileRaw(*fields))
     }
 
 
+    /**
+     * Get user email "as is"
+     */
     fun getUserEmailRaw(): JSONObject? {
         if (sessionManager.isSessionValid()) {
             val token = sessionManager.getToken()
@@ -57,12 +72,30 @@ class LinkedinApiHelper(activity: Activity) {
         return null
     }
 
+    /**
+     * Get user email without redundant nested json fields
+     */
     fun getUserEmailPretty(): String? {
         return mapper.beautifyEmail(getUserEmailRaw())
     }
 
+    /**
+     * Launch Linkedin Login flow
+     * Result of login can be obtained by overriding OnActivityResult.
+     *
+     * Request code for LinkedIn Login is ACTIVITY_REQUEST_CODE
+     * @param scope Permission scope required by the application
+     * @param appConfig Required auth details of the application registered in LinkedIn Developers
+     */
     fun login(scope: PermissionsScope, appConfig: AppConfig) {
         sessionManager.login(scope, appConfig)
+    }
+
+    /**
+     * Get current session token
+     */
+    fun getCurrentToken(): String? {
+        return sessionManager.getToken()?.accessTokenValue
     }
 }
 
