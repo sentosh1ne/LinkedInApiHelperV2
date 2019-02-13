@@ -8,7 +8,6 @@ import org.json.JSONObject
 
 class LinkedinApiHelper(activity: Activity) {
 
-    private var accessToken: AccessToken? = null
 
     private val sessionManager: SessionManager = SessionManager(activity)
 
@@ -20,15 +19,12 @@ class LinkedinApiHelper(activity: Activity) {
         const val ACTIVITY_REQUEST_CODE: Int = 532
     }
 
-    init {
-        accessToken = sessionManager.getToken()
-    }
-
     fun getUserProfileRaw(vararg fields: String): JSONObject? {
-        if (accessToken != null && sessionManager.isSessionValid()) {
+        val token = sessionManager.getToken()
+        if (token != null && sessionManager.isSessionValid()) {
             return myProfileApi.getUserProfile(
                     fields = *fields,
-                    token = accessToken!!.accessTokenValue
+                    token = token.accessTokenValue
             )
         }
 
@@ -36,7 +32,9 @@ class LinkedinApiHelper(activity: Activity) {
     }
 
     fun getUserProfileRaw(): JSONObject {
-        if (accessToken != null && sessionManager.isSessionValid()) {
+        //todo use all fields
+        val token = sessionManager.getToken()
+        if (token != null && sessionManager.isSessionValid()) {
         }
 
         return JSONObject()
@@ -44,19 +42,23 @@ class LinkedinApiHelper(activity: Activity) {
 
 
     fun getUserProfilePretty(vararg fields: String): JSONObject? {
-        if (accessToken != null && sessionManager.isSessionValid()) {
-            val userProfile = myProfileApi.getUserProfile(
-                    fields = *fields,
-                    token = accessToken!!.accessTokenValue)
+        return mapper.beautifyLiteProfile(getUserProfileRaw())
+    }
 
-            return mapper.mapLiteProfile(userProfile)
+
+    fun getUserEmailRaw(): JSONObject? {
+        if (sessionManager.isSessionValid()) {
+            val token = sessionManager.getToken()
+            token?.let {
+                return myProfileApi.getUserEmail(token.accessTokenValue)
+            }
         }
 
         return null
     }
 
-    fun getUserEmail(): JSONObject {
-        return JSONObject()
+    fun getUserEmailPretty(): String? {
+        return mapper.beautifyEmail(getUserEmailRaw())
     }
 
     fun login(scope: PermissionsScope, appConfig: AppConfig) {

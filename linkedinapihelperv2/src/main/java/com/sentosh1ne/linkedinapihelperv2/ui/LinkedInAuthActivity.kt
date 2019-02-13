@@ -70,21 +70,14 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
     private fun getPrelolipopWebViewClient(): WebViewClient {
         return object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
-                if (!url.contains(appConfig.redirectUrl)){
+                if (!url.contains(appConfig.redirectUrl)) {
                     return super.shouldOverrideUrlLoading(view, url)
                 }
 
                 val parsedUri = Uri.parse(url)
-                val code = parsedUri.getQueryParameter("code")
-                state = parsedUri.getQueryParameter("state")
 
-                code?.let {
-                    runBlocking {
-                        withContext(Dispatchers.Default) {
-                            requestToken(code)
-                        }
-                    }
-                }
+                if (extractRedirectParameters(parsedUri)) return false
+
                 return false
             }
         }
@@ -95,24 +88,36 @@ internal class LinkedInAuthActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
-                if (!request.url.toString().contains(appConfig.redirectUrl)){
+                if (!request.url.toString().contains(appConfig.redirectUrl)) {
                     return super.shouldOverrideUrlLoading(view, request)
                 }
 
-                val code = request.url?.getQueryParameter("code")
-                state = request.url?.getQueryParameter("state")
-
-                code?.let {
-                    runBlocking {
-                        withContext(Dispatchers.Default) {
-                            requestToken(code)
-                        }
-                    }
-                }
+                if (extractRedirectParameters(request.url)) return false
 
                 return false
             }
         }
+    }
+
+    private fun extractRedirectParameters(url:Uri): Boolean {
+        val code = url.getQueryParameter("code")
+        val error = url.getQueryParameter("error")
+        val errorDescription = url.getQueryParameter("error_description")
+
+        if (code == null) {
+            finish()
+            Log.d(LinkedInAuthActivity::class.java.simpleName, "Error = $error \n Description = $errorDescription")
+            return true
+        }
+
+        state = url.getQueryParameter("state")
+
+        runBlocking {
+            withContext(Dispatchers.Default) {
+                requestToken(code)
+            }
+        }
+        return false
     }
 
     private fun requestToken(code: String) {

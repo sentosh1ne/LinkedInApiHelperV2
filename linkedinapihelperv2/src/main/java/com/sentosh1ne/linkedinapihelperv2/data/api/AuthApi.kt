@@ -1,5 +1,6 @@
 package com.sentosh1ne.linkedinapihelperv2.data.api
 
+import android.util.Log
 import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
 import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken
 import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
@@ -30,6 +31,7 @@ internal class AuthApi {
             }
         }
 
+        Log.d(AuthApi::class.java.simpleName, "Code request url = ${url?.build().toString()}")
         return url?.build().toString()
     }
 

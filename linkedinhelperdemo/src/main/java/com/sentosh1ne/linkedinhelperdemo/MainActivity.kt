@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private val clientId = "86rmods9ln6yj5"
     private val clientSecret = "VWUjjkx7yEQX2ceO"
-    private val redirectUri = "http://www.omivoyage.com"
+    private val redirectUri = "https://google.com"
 
     private lateinit var apiHelper: LinkedinApiHelper
 
@@ -29,21 +29,22 @@ class MainActivity : AppCompatActivity() {
         apiHelper = LinkedinApiHelper(this)
         btnLogin.setOnClickListener {
             apiHelper.login(
-                    PermissionsScope(Scopes.R_LITEPROFILE),
+                    PermissionsScope(Scopes.R_EMAILADDRESS),
                     AppConfig(clientId, clientSecret, redirectUri)
             )
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == LinkedinApiHelper.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(this::class.java.simpleName, "Successful login with token ${data?.getStringExtra("access_token")}")
-            getUserProfileRaw()
+            getUserEmailRaw()
         }
     }
 
-    private fun getUserProfileRaw() {
+    private fun getUserProfile() {
         runBlocking {
             withContext(Dispatchers.Default) {
                 val result = apiHelper.getUserProfilePretty(
@@ -53,6 +54,17 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 Log.d(this::class.java.simpleName, "Profile json = ${result.toString()}")
+            }
+
+        }
+    }
+
+    private fun getUserEmailRaw() {
+        runBlocking {
+            withContext(Dispatchers.Default) {
+                val result = apiHelper.getUserEmailPretty()
+
+                Log.d(this::class.java.simpleName, "Email json = ${result.toString()}")
             }
 
         }

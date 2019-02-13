@@ -1,17 +1,35 @@
 package com.sentosh1ne.linkedinapihelperv2.data.base
 
+import com.sentosh1ne.linkedinapihelperv2.utils.isEmpty
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
 internal class ResponseBeautifier {
-    fun mapLiteProfile(initial: JSONObject?): JSONObject? {
+    fun beautifyLiteProfile(initial: JSONObject?): JSONObject? {
         initial?.let {
             val mapper = ProfileMapper(it)
             return mapper.mapFirstName()
                     .mapLastName()
                     .mapProfilePicture()
                     .get()
+        }
+
+        return null
+    }
+
+    fun beautifyEmail(initial: JSONObject?): String? {
+        initial?.let {
+
+            val elements = initial.getJSONArray("elements")
+
+            if (!elements.isEmpty()) {
+                return elements.getJSONObject(0)
+                        .getJSONObject("handle~")
+                        .getString("emailAddress")
+            }
+
+            return null
         }
 
         return null
@@ -56,7 +74,9 @@ internal class ProfileMapper(private val input: JSONObject?) {
                 val identifiers = item.getJSONArray("identifiers")
 
                 if (identifiers != null && identifiers.length() > 0) {
-                    val url = identifiers.getJSONObject(0).getString("file")
+                    val url = identifiers.getJSONObject(0)
+                            .getString("file")
+
                     pictureJson.put("url", url)
                 } else {
                     pictureJson.put("url", "")

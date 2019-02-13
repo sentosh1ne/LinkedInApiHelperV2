@@ -16,7 +16,9 @@ interface Fields {
         val PROFILE_PICTURE = "profilePicture(displayImage~:playableStreams)"
     }
 
-    object EmailAddress
+    object EmailAddress {
+        val EMAIL = "emailAddress?q=members&projection=(elements*(handle~))"
+    }
 
     /**
      * To access any of the following basic profile fields, your application must request the r_basicprofile member permission
