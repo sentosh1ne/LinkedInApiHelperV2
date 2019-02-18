@@ -1,6 +1,5 @@
 package com.sentosh1ne.linkedinapihelperv2.data.api
 
-import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
 import com.sentosh1ne.linkedinapihelperv2.entities.Fields
 import com.sentosh1ne.linkedinapihelperv2.utils.API_BASE_URL
 import org.json.JSONObject

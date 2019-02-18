@@ -3,6 +3,8 @@ package com.sentosh1ne.linkedinapihelperv2.data.session
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken
+import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
 import com.sentosh1ne.linkedinapihelperv2.utils.PreferencesUtil

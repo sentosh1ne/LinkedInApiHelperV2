@@ -1,4 +1,4 @@
-package com.sentosh1ne.linkedinapihelperv2.data.session
+package com.sentosh1ne.linkedinapihelperv2.entities
 
 import android.os.Parcel
 import android.os.Parcelable

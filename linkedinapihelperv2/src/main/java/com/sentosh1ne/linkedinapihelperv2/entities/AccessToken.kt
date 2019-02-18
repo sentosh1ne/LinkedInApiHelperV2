@@ -1,4 +1,4 @@
-package com.sentosh1ne.linkedinapihelperv2.data.session
+package com.sentosh1ne.linkedinapihelperv2.entities
 
 import org.json.JSONException
 import org.json.JSONObject

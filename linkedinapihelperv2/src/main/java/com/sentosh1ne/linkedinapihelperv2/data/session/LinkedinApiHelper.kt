@@ -2,7 +2,8 @@ package com.sentosh1ne.linkedinapihelperv2.data.session
 
 import android.app.Activity
 import com.sentosh1ne.linkedinapihelperv2.data.api.MyProfileApi
-import com.sentosh1ne.linkedinapihelperv2.data.base.ResponseBeautifier
+import com.sentosh1ne.linkedinapihelperv2.data.api.ResponseBeautifier
+import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import org.json.JSONObject
 

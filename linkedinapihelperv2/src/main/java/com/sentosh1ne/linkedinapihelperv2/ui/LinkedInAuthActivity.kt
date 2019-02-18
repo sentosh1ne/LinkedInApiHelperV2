@@ -14,8 +14,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.sentosh1ne.linkedinapihelperv2.R
 import com.sentosh1ne.linkedinapihelperv2.data.api.AuthApi
-import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.data.session.SessionManager
+import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import kotlinx.android.synthetic.main.auth_activity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

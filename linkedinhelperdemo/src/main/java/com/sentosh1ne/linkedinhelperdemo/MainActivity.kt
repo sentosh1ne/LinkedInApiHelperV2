@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.data.session.LinkedinApiHelper
+import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.entities.Fields
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import com.sentosh1ne.linkedinapihelperv2.entities.Scopes

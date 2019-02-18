@@ -1,11 +1,10 @@
 package com.sentosh1ne.linkedinapihelperv2.data.api
 
 import android.util.Log
-import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
-import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken
-import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken.Companion.ACCESS_TOKEN
-import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken.Companion.EXPIRES_ON
-import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
+import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken
+import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken.Companion.ACCESS_TOKEN
+import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken.Companion.EXPIRES_ON
+import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.utils.AUTH_BASE_URL
 import okhttp3.HttpUrl
 import org.json.JSONException
