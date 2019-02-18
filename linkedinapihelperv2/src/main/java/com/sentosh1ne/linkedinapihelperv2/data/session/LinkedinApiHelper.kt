@@ -2,7 +2,7 @@ package com.sentosh1ne.linkedinapihelperv2.data.session
 
 import android.app.Activity
 import com.sentosh1ne.linkedinapihelperv2.data.api.MyProfileApi
-import com.sentosh1ne.linkedinapihelperv2.data.api.ResponseBeautifier
+import com.sentosh1ne.linkedinapihelperv2.data.api.common.ResponseBeautifier
 import com.sentosh1ne.linkedinapihelperv2.entities.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.entities.PermissionsScope
 import org.json.JSONObject
@@ -14,7 +14,6 @@ import org.json.JSONObject
  */
 class LinkedinApiHelper(activity: Activity) {
 
-
     private val sessionManager: SessionManager = SessionManager(activity)
 
     private val myProfileApi: MyProfileApi = MyProfileApi()
@@ -22,6 +21,9 @@ class LinkedinApiHelper(activity: Activity) {
     private val mapper = ResponseBeautifier()
 
     companion object {
+        /**
+         * Request code to listen for in the onActivityResult
+         */
         const val ACTIVITY_REQUEST_CODE: Int = 532
     }
 
@@ -41,14 +43,6 @@ class LinkedinApiHelper(activity: Activity) {
         return null
     }
 
-    fun getUserProfileRaw(): JSONObject {
-        //todo use all fields
-        val token = sessionManager.getToken()
-        if (token != null && sessionManager.isSessionValid()) {
-        }
-
-        return JSONObject()
-    }
 
     /**
      * Get lite profile info without redundant nested json fields
@@ -84,7 +78,7 @@ class LinkedinApiHelper(activity: Activity) {
      * Launch Linkedin Login flow
      * Result of login can be obtained by overriding OnActivityResult.
      *
-     * Request code for LinkedIn Login is ACTIVITY_REQUEST_CODE
+     * Request code for LinkedIn Login is ACTIVITY_REQUEST_CODE = 532
      * @param scope Permission scope required by the application
      * @param appConfig Required auth details of the application registered in LinkedIn Developers
      */

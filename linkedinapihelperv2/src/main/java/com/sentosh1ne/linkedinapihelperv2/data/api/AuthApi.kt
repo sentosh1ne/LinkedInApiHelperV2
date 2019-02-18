@@ -1,6 +1,7 @@
 package com.sentosh1ne.linkedinapihelperv2.data.api
 
 import android.util.Log
+import com.sentosh1ne.linkedinapihelperv2.data.api.common.BaseApi
 import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken
 import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken.Companion.ACCESS_TOKEN
 import com.sentosh1ne.linkedinapihelperv2.entities.AccessToken.Companion.EXPIRES_ON
@@ -10,9 +11,7 @@ import okhttp3.HttpUrl
 import org.json.JSONException
 import org.json.JSONObject
 
-internal class AuthApi {
-    private val requestCreator = RequestCreator()
-
+internal class AuthApi : BaseApi(){
     /**
      * Creates url used in webview to acquire code used for authorization
      * @see com.sentosh1ne.linkedinapihelperv2.ui.LinkedInAuthActivity
@@ -58,9 +57,9 @@ internal class AuthApi {
             query["state"] = state
         }
 
-        val request = requestCreator.buildPostRequest(url, query)
+        val request = this.requestCreator.buildPostRequest(url, query)
 
-        val response = ClientProvider.getClient().newCall(request).execute()
+        val response = this.client.newCall(request).execute()
         val responseJson = JSONObject(response.body()?.string())
 
         return AccessToken(

@@ -1,4 +1,4 @@
-package com.sentosh1ne.linkedinapihelperv2.data.api
+package com.sentosh1ne.linkedinapihelperv2.data.api.common
 
 import com.sentosh1ne.linkedinapihelperv2.utils.isEmpty
 import org.json.JSONArray
