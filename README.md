@@ -1,6 +1,8 @@
 # LinkedInApiHelperV2
 Android library for LinkedIn version 2 of the API. (Created due to deprecation of current SDK) Work in Progress
-
+## Descripton
+LinkedInApiHelperV2 is the tool to replace deprecated Android SDK as well as API v1 requests. 
+You can authorize user by the new code flow (3-legged OAuth), use some prebuilt utility methods or make your own requests.
 ## Installation
 TBD
 ## Usage
