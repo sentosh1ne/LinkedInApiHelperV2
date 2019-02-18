@@ -24,9 +24,7 @@ internal class MyProfileApi {
         val headers = HashMap<String, String>()
         headers["Authorization"] = "Bearer $token"
 
-        val request = requestCreator.buildGetRequest(url = url,
-                headers = headers
-        )
+        val request = requestCreator.buildGetRequest(url = url, headers = headers)
 
         return JSONObject(
                 client. newCall (request)

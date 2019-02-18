@@ -3,6 +3,8 @@ package com.sentosh1ne.linkedinapihelperv2.data.api
 import android.util.Log
 import com.sentosh1ne.linkedinapihelperv2.data.base.ClientProvider
 import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken
+import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken.Companion.ACCESS_TOKEN
+import com.sentosh1ne.linkedinapihelperv2.data.session.AccessToken.Companion.EXPIRES_ON
 import com.sentosh1ne.linkedinapihelperv2.data.session.AppConfig
 import com.sentosh1ne.linkedinapihelperv2.utils.AUTH_BASE_URL
 import okhttp3.HttpUrl
@@ -26,7 +28,7 @@ internal class AuthApi {
             url.addQueryParameter("redirect_uri", appConfig.redirectUrl)
             url.addEncodedQueryParameter("scope", scope)
 
-            if (state != null && !state.isEmpty()) {
+            if (state != null && state.isNotEmpty()) {
                 url.addQueryParameter("state", state)
             }
         }
@@ -63,8 +65,8 @@ internal class AuthApi {
         val responseJson = JSONObject(response.body()?.string())
 
         return AccessToken(
-                responseJson.getString("access_token"),
-                System.currentTimeMillis() + responseJson.getLong("expires_in")
+                responseJson.getString(ACCESS_TOKEN),
+                System.currentTimeMillis() + responseJson.getLong(EXPIRES_ON)
         )
     }
 }
