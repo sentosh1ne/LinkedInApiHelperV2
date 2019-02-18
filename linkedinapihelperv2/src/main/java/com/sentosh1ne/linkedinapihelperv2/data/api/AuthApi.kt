@@ -24,7 +24,7 @@ internal class AuthApi {
             url.addQueryParameter("client_id", appConfig.clientId)
             url.addQueryParameter("client_secret", appConfig.clientSecret)
             url.addQueryParameter("redirect_uri", appConfig.redirectUrl)
-            url.addQueryParameter("scope", scope)
+            url.addEncodedQueryParameter("scope", scope)
 
             if (state != null && !state.isEmpty()) {
                 url.addQueryParameter("state", state)

@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         apiHelper = LinkedinApiHelper(this)
         btnLogin.setOnClickListener {
             apiHelper.login(
-                    PermissionsScope(Scopes.R_EMAILADDRESS),
+                    PermissionsScope(Scopes.R_EMAILADDRESS, Scopes.R_LITEPROFILE),
                     AppConfig(clientId, clientSecret, redirectUri)
             )
         }
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == LinkedinApiHelper.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Log.d(this::class.java.simpleName, "Successful login with token ${data?.getStringExtra("access_token")}")
-            getUserEmailRaw()
+            apiHelper.getUserEmailRaw()
         }
     }
 
